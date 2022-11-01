@@ -1,0 +1,26 @@
+
+.labelWidth60 {
+	border-right: 1px solid #ffffff;
+	max-height: 167rpx;
+	overflow: hidden;
+}
+.mx-line1 {
+	width: 690rpx;
+	height: 167rpx;
+}
+swiper {
+	height: 300rpx;
+}
+.segmented-control__text {
+	color: #999999 !important;
+}
+.segmented-control__item--text {
+	color: #ffffff !important;
+}
+.mx-line2 {
+	width: 132rpx;
+	height: 111rpx;
+	text-align: center;
+	line-height: 111rpx;
+}
+

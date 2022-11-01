@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>登录</title>
+	</head>
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="css/uikit.min.css" />
+	<script src="js/uikit.min.js"></script>
+	<script src="js/uikit-icons.min.js"></script>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<body>
+		<div class="uk-flex uk-flex-center uk-flex-middle" style="height: 100vh;background-color: #EBF0F3;">
+			<div>
+				<div class="uk-text-center login_title">查企业后台管理系统</div>
+				<div class="uk-flex uk-flex-center uk-flex-middle login_first">
+					<div>
+						<div class="uk-text-center">欢迎回来，请登录您的账号。</div>
+						<div class="uk-margin">
+							<div class="uk-inline">
+								<span class="uk-form-icon" uk-icon="icon: user"></span>
+								<input class="uk-input" style="width: 300px;" id="username" type="text"
+									placeholder="用户名" autocomplete="off">
+							</div>
+						</div>
+						<div class="uk-margin">
+							<div class="uk-inline">
+								<span class="uk-form-icon" uk-icon="icon: lock"></span>
+								<input class="uk-input" style="width: 300px;" id="password" type="password"
+									placeholder="密码" autocomplete="off">
+							</div>
+						</div>
+						<button class="uk-button uk-button-primary" style="float: right;" onclick="login()">登录</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+	<script>
+		function login() {
+			let mobile = $('#username').val()
+			let password = $('#password').val()
+			if (!mobile) {
+				alert('请输入用户名')
+				return
+			}
+			if (!password) {
+				alert('请输入密码')
+				return
+			}
+			$.ajax({
+				url: "http://47.104.8.244:39000/api/auth/login", //请求的url地址
+				dataType: "json", //返回格式为json
+				type: "POST", //请求方式
+				data: {
+					mobile: mobile,
+					password: password
+				},
+				beforeSend: function(res) {
+					//请求前的处理
+				},
+				success: function(res) {
+					if (res.code == 200) {
+						let token = res.data.access_token
+						let token_type = res.data.token_type
+						localStorage.setItem("token", token);
+						localStorage.setItem("token_type", token_type);
+						window.location.href = "index.html";
+					} else {
+						alert(res.msg)
+					}
+				},
+				complete: function(res) {
+					//请求完成的处理
+				},
+				error: function(res) {
+					//请求出错处理
+					console.log('错误：', res)
+				}
+			});
+		}
+	</script>
+</html>

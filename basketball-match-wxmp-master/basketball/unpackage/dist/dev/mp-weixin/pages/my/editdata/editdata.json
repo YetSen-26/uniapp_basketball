@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "编辑信息",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "uni-datetime-picker": "/uni_modules/uni-datetime-picker/components/uni-datetime-picker/uni-datetime-picker"
+  }
+}

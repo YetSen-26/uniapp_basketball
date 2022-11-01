@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>网站收缩系统</title>
+	</head>
+	<link rel="stylesheet" href="css/main.css" />
+	<link rel="stylesheet" href="css/uikit.min.css" />
+	<script src="js/uikit.min.js"></script>
+	<script src="js/uikit-icons.min.js"></script>
+	<script src="js/jquery-3.1.1.min.js"></script>
+	<body>
+		<div class="uk-container">
+			<div class="uk-flex uk-flex-between " style="margin: 10px 0;">
+				<div class="uk-text-large uk-text-bold uk-text-emphasis">XXX网站收缩系统</div>
+				<div id="userinfo">
+				</div>
+			</div>
+		</div>
+		<div>
+			<div class="uk-background-cover uk-height-medium uk-panel uk-flex uk-flex-center uk-flex-middle"
+				style="background-image: url(./img/bjtp.png);">
+				<p style="font-weight: 900;color: #FFFFFF;"><span uk-icon="heart"
+						uk-icon="icon: check; ratio: 53.5"></span>关注列表</p>
+			</div>
+		</div>
+		<div style="background-color: #EDEDED;">
+
+			<div class="uk-container">
+				<div class="uk-flex uk-flex-between index-title uk-text-lead">
+					<div>为您查找了<span id="datacount" style="color: red;"></span>条相关数据</div>
+					<div style="padding-right:3.125rem ;" id="exportdataid">
+
+						<!-- <button class="uk-button uk-button-default uk-button-small" onclick="sendemail()"
+							style="color: #2695EE ;border:1px solid #2695EE;">发送至邮箱</button> -->
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="index-margintop index-font" id="content">
+		</div>
+
+		<div class="uk-container">
+			<ul class="uk-pagination uk-flex-right uk-margin-medium-top" uk-margin id="fyhtml">
+			</ul>
+		</div>
+
+		<div class="paging_container">
+			<ul class="paging_list"></ul>
+		</div>
+		<div class="paging_content">
+			<div class="paging_first">首页</div>
+			<!-- <div class="paging_up">上一个</div> -->
+			<div class="paging_btn"></div>
+			<!-- <div class="paging_down">下一个</div> -->
+			<div class="paging_last" id="">尾页</div>
+		</div>
+		<script src="js/json.js"></script>
+		<script src="js/jquery-paging.js"></script>
+	</body>
+
+	<script>
+		$('#datacount').text('0')
+		let key_range = "";
+		let year = "";
+		let industry_involved = "";
+		let province = "";
+		var page = 1;
+		var count = 0;
+		let token = localStorage.getItem("token");
+		let token_type = localStorage.getItem("token_type");
+		let nickname = ""
+		let key = "";
+		// let initialization = false;
+		let istype = true;
+		getuserinfo()
+		payattentionto()
+		let shpagingtype = 0;
+		//头部
+		function csh() {
+			$('#userinfo').html('')
+			$('#exportdataid').html('')
+			if (token && token_type) {
+				$('#userinfo').append(
+					'<span>欢迎登录，' + nickname + '</span>' +
+					'<button style="margin-left:20px" onclick="out()" class="uk-button uk-button-primary uk-button-small">退出</button>' +
+					'<button style="margin-left:20px" onclick="payattentiontoall()" class="uk-button uk-button-primary uk-button-small">查看全部</button>'
+				)
+				$('#exportdataid').append(
+					'<button class="uk-button uk-button-primary uk-button-small" onclick="exportdata()">导出数据</button>')
+			} else {
+				$('#userinfo').append(
+					'<button class="uk-button uk-button-primary uk-button-small" style="margin-left:20px" onclick="login()">登录</button>'
+				)
+			}
+		}
+
+		//跳转登录
+		function login() {
+			window.location.href = "login.html";
+		}
+
+		function removeExistingItem() {
+			if (localStorage.getItem("token") === null && localStorage.getItem("token_type") === null) {
+				return false;
+			} else {
+				localStorage.removeItem("token")
+				localStorage.removeItem("token_type")
+				return true;
+			}
+		}
+
+		//查看全部
+		function payattentiontoall() {
+			window.location.href = "index.html";
+		}
+
+		//退出登录
+		function out() {
+			$.ajax({
+				url: "http://47.104.8.244:39000/api/auth/logout", //请求的url地址
+				dataType: "json", //返回格式为json
+				type: "POST", //请求方式
+				headers: {
+					"Authorization": token_type + ' ' + token
+				},
+				beforeSend: function(res) {
+					//请求前的处理
+				},
+				success: function(res) {
+					console.log(res)
+					if (res.code == 200) {
+						let type = removeExistingItem();
+						console.log(type)
+						if (type) {
+							//刷新当前页面
+							location.reload();
+							// csh()
+						}
+					} else {
+						alert(res.msg)
+					}
+				},
+				complete: function(res) {
+					//请求完成的处理
+				},
+				error: function(res) {
+					//请求出错处理
+					console.log('错误：', res)
+					alert(res.responseText)
+				}
+			});
+		}
+
+		function refreshpaging(initialization) {
+			payattentionto(false)
+		}
+
+		//关注列表
+		function payattentionto() {
+			$.ajax({
+				url: "http://47.104.8.244:39000/api/collect/index", //请求的url地址
+				dataType: "json", //返回格式为json
+				type: "POST", //请求方式
+				headers: {
+					"Authorization": token_type + ' ' + token
+				},
+				data: {
+					page: page
+				},
+				beforeSend: function(res) {
+					//请求前的处理
+				},
+				success: function(res) {
+					console.log(res)
+					shpagingtype = 1;
+					if (res.code == 200) {
+						istype = false
+						$('#datacount').text(res.meta.total)
+						$('#content').html('')
+
+						let data = res.data
+						for (let i = 0; i < data.length; i++) {
+							let note = data[i].company_note ? data[i].company_note : ''
+							console.log(data)
+							let gzurl = data[i].collect_id ? "./img/gzygz.png" : "./img/gzwgz.png"
+							let bjurl = data[i].company_note ? "./img/bjybj.png" : "./img/bjwbj.png"
+							let bjandgz = token ? '<div class="index-content-content-item-wz uk-flex-inline">' +
+								'<div id="modal-example' + i + '" uk-modal>' +
+								'<div class="uk-modal-dialog uk-modal-body">' +
+								'<h2 class="uk-modal-title">笔记</h2>' +
+								// '<input class="uk-input" id="bjnr' + i +
+								// '" type="text" placeholder="请输入笔记内容" autocomplete="off" value="' +
+								// note +
+								// '"/>' +
+								'<textarea class="uk-textarea" rows="5" id="bjnr'+i+'" placeholder="请输入笔记内容">'+note+'</textarea>'+
+								'<p class="uk-text-right">' +
+								'<button class="uk-button uk-button-default uk-modal-close" style="margin-right:10px" id="qxnote" type="button">取消</button>' +
+								'<button class="uk-button uk-button-primary" onclick="savenote(' + data[i].id +
+								',' + i + ')" type="button">保存</button>' +
+								' </p>' +
+								' </div>' +
+								'</div>' +
+								'<div class="index-bs index-marginright" href="#modal-example' + i +
+								'" uk-toggle><img data-src="' + bjurl +
+								'" style="width:50px;max-width:800%;height: 20px;" alt="" uk-img></div>' +
+								'<div class="index-bs index-marginright" id="gz" onclick="collectedit(' + data[i]
+								.id + ')"><img data-src="' + gzurl +
+								'" style="width:50px;max-width:800%;height: 20px;" alt="" uk-img></div>' +
+								'</div>' : ''
+							let html = '<div class="uk-flex uk-container uk-flex-between">' +
+								'<div>' +
+								'<div class="uk-flex uk-flex-column index-content-content-item-zjwz">' +
+								'<div class="uk-flex-inline">' +
+								'<div class="index-content-content-item-title">' + data[i].company_name +
+								'</div>' +
+								'<div class="index-content-content-item-status index-content-content-item-marginleft">' +
+								data[i].registration_status + '</div>' +
+								'</div>' +
+
+								'<div class="uk-flex-inline">' +
+								'<div>曾用名：</div>' +
+								'<div>' + data[i].used_name + '</div>' +
+								'</div>' +
+								'<div class="uk-flex-inline">' +
+								'<div>英文名：</div>' +
+								'<div>' + data[i].en_name + '</div>' +
+								'</div>' +
+
+
+								'<div class="uk-flex-inline">' +
+								'<div>统一社会信用码：</div>' +
+								'<div>' + data[i].uniform_social_credit_code + '</div>' +
+								'<div class="index-content-content-item-marginleft">所属行业：</div>' +
+								'<div>' + data[i].industry_involved + '</div>' +
+								'</div>' +
+								'<div class="uk-flex-inline">' +
+								'<div>法定人：</div>' +
+								// '<div style="color: #2695EE;">' + data[i].legal_person_name + '</div>'+
+								'<div>' + data[i].legal_person_name + '</div>' +
+								'<div class="index-content-content-item-marginleft">注册资本：</div>' +
+								'<div>' + data[i].registration_money + '</div>' +
+								'<div class="index-content-content-item-marginleft">企业类型：</div>' +
+								'<div>' + data[i].company_type + '</div>' +
+								'<div class="index-content-content-item-marginleft">成立日期：</div>' +
+								'<div>' + data[i].create_date + '</div>' +
+								'</div>' +
+								'<div class="uk-flex-inline">' +
+								'<div>参保人：</div>' +
+								'<div>' + data[i].CBZZ + '人</div>' +
+								'<div class="index-content-content-item-marginleft">纳税人识别号：</div>' +
+								'<div>' + data[i].taxpayer_registration_number + '</div>' +
+								'<div class="index-content-content-item-marginleft">注册号：</div>' +
+								'<div>' + data[i].registration_code + '</div>' +
+								'<div class="index-content-content-item-marginleft">组织机构代码：</div>' +
+								'<div>' + data[i].organizing_code + '</div>' +
+
+								'</div>' +
+								'<div class="uk-flex-inline">' +
+								'<div>电话：</div>' +
+								'<div class="index-color"><span uk-icon="receiver"></span></div>' +
+								'<div>' + data[i].tel + '</div>' +
+								'<div class="index-content-content-item-marginleft">更多：</div>' +
+								'<div>' + data[i].more_tel + '</div>' +
+								'</div>' +
+
+								'<div class="uk-flex-inline">' +
+								'<div>邮箱：</div>' +
+								'<div>' + data[i].email + '</div>' +
+								'<div class="index-content-content-item-marginleft">官网：</div>' +
+								'<div>' + data[i].web_uri + '</div>' +
+								'</div>' +
+
+								'<div class="uk-flex-inline">' +
+								'<div>地址：</div>' +
+								'<div>' + data[i].address + '</div>' +
+								'</div>' +
+								'<div class="uk-flex-inline uk-flex-wrap">' +
+								'<div class="index-color"><span uk-icon="link"></span></div>' +
+								'<div>经营范围：</div>' +
+								'<div>' + data[i].business_scope + '</div>' +
+								'</div>' +
+								'</div>' +
+								'</div>' +
+								bjandgz +
+								'</div>' +
+								'<div style="border: 0.0625rem solid #F7F7F7;margin-top: 1.25rem;margin-bottom: 1.25rem;"></div>'
+							$('#content').append(html)
+						}
+
+
+						// let sl = res.meta.total; //per_page
+						let sl = Math.ceil(res.meta.total / res.meta.per_page);
+						console.log("aaaa", sl)
+						count = res.meta.per_page
+						$(".paging_content").css("display", "none")
+						$('#fyhtml').css("display", "flex")
+						$('#fyhtml').html('')
+						// if (sl > 1) {
+						$('#fyhtml').append(
+							'<li><a onclick="next(-1)"><span uk-pagination-previous></span></a></li>')
+						for (let i = 0; i < sl; i++) {
+							let number = i + 1
+							$('#fyhtml').append('<li><a onclick="getpage(' + number + ')">' + number +
+								'</a></li>')
+						}
+						$('#fyhtml').append(
+							'<li><a onclick="next(1)"><span uk-pagination-next></span></a></li>')
+						// }
+
+
+					}
+
+				},
+				complete: function(res) {
+					//请求完成的处理
+				},
+				error: function(res) {
+					//请求出错处理
+					console.log('错误：', res)
+				}
+			});
+		}
+
+		//保存笔记
+		function savenote(id, i) {
+			console.log(id, i)
+			let ids = `#bjnr${i}`
+			console.log(ids)
+			let note = $(ids).val();
+			console.log(note)
+			$.ajax({
+				url: "http://47.104.8.244:39000/api/company/note", //请求的url地址
+				dataType: "json", //返回格式为json
+				type: "POST", //请求方式
+				headers: {
+					"Authorization": token_type + ' ' + token
+				},
+				data: {
+					company_id: id,
+					note: note
+				},
+				beforeSend: function(res) {
+					//请求前的处理
+				},
+				success: function(res) {
+					console.log(res)
+					if (res.code == 200) {
+						UIkit.modal('#modal-example'+i).hide();
+						alert('添加成功')
+						key = $('#key').val();
+						payattentionto()
+					} else {
+						alert(res.msg)
+					}
+				},
+				complete: function(res) {
+					//请求完成的处理
+				},
+				error: function(res) {
+					//请求出错处理
+					console.log('错误：', res)
+				}
+			});
+		}
+
+		//获取用户信息
+		function getuserinfo() {
+			if (localStorage.getItem("token") === null && localStorage.getItem("token_type") === null) {
+				csh()
+				return;
+			}
+			$.ajax({
+				url: "http://47.104.8.244:39000/api/auth/me", //请求的url地址
+				dataType: "json", //返回格式为json
+				type: "POST", //请求方式
+				headers: {
+					"Authorization": token_type + ' ' + token
+				},
+				// header["Authorization"] = MY.token_type + " " + MY.access_token
+				beforeSend: function(res) {
+					//请求前的处理
+				},
+				success: function(res) {
+					console.log(res)
+					if (res.code == 200) {
+						nickname = res.data.nickname
+						csh()
+					}
+				},
+				complete: function(res) {
+					//请求完成的处理
+				},
+				error: function(res) {
+					//请求出错处理
+					console.log('错误：', res)
+				}
+			});
+		}
+
+		//下一页、上一页
+		function next(t) {
+			page = page + t
+			if (page == 0) {
+				page = 1
+			}
+			if (page > count) {
+				page = 1
+			}
+			key = $('#key').val();
+			payattentionto()
+		}
+
+		//页码点击
+		function getpage(t) {
+			page = t
+			key = $('#key').val();
+			payattentionto()
+		}
+
+		// 更多 收起
+		$(".more").click(function() {
+			let text = $(this).find('span').text();
+			if (text == "更多") {
+				$(this).find('span').text("收起");
+				$(this).prev().css("overflow", "auto")
+				$(this).prev().css("height", "auto")
+				$(this).find('img').attr("src", "img/shouqi.png")
+			} else {
+				$(this).find('span').text("更多");
+				$(this).find('img').attr("src", "img/xiala.png")
+				$(this).prev().css("overflow", "hidden")
+				$(this).prev().css("height", "32px")
+			}
+		})
+
+		//导出数据
+		function exportdata() {
+			if (count == 0) {
+				alert('无数据!')
+				return
+			}
+			key = $('#key').val();
+			window.open('http://47.104.8.244:39000/api/company/download?year=' + year + '&key=' + key + '&key_range=' +
+				key_range + '&industry_involved=' + industry_involved + '&province=' + province)
+		}
+
+		//关注、取关
+		function collectedit(id) {
+			$.ajax({
+				url: "http://47.104.8.244:39000/api/collect/edit", //请求的url地址
+				dataType: "json", //返回格式为json
+				type: "POST", //请求方式
+				data: {
+					company_id: id
+				},
+				headers: {
+					"Authorization": token_type + ' ' + token
+				},
+				// header["Authorization"] = MY.token_type + " " + MY.access_token
+				beforeSend: function(res) {
+					//请求前的处理
+				},
+				success: function(res) {
+					console.log(res)
+					if (res.code == 200) {
+						alert('操作成功!')
+						key = $('#key').val();
+						payattentionto()
+					} else {
+						alert(res.msg)
+					}
+				},
+				complete: function(res) {
+					//请求完成的处理
+				},
+				error: function(res) {
+					//请求出错处理
+					console.log('错误：', res)
+				}
+			});
+		}
+	</script>
+</html>

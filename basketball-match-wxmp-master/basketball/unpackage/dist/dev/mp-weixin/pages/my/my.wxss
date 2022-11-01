@@ -1,0 +1,38 @@
+
+.main {
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+.jb {
+	width: 600rpx;
+	height: 98rpx;
+	background: #212F74;
+	border-radius: 49rpx;
+}
+.qd {
+	width: 120rpx;
+	height: 50rpx;
+	background: #E92934;
+	border-radius: 25rpx;
+	font-size: 24rpx;
+	font-weight: bold;
+	color: #FFFFFF;
+	text-align: center;
+	line-height: 50rpx;
+}
+.yqd {
+	width: 120rpx;
+	height: 50rpx;
+	background: #DCDCDC;
+	border-radius: 25rpx;
+	font-size: 24rpx;
+	font-weight: bold;
+	color: #999999;
+	text-align: center;
+	line-height: 50rpx;
+}
+

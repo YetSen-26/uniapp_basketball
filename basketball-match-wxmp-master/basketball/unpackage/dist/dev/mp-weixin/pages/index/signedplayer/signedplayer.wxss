@@ -1,0 +1,27 @@
+
+.mx-th{
+	 overflow: hidden;
+	    white-space: nowrap;
+	    text-overflow: ellipsis;
+}
+.mx-th:nth-child(1){
+	width: 200rpx;
+}
+.mx-th:nth-child(2){
+	width: 390rpx;
+}
+.mx-th:nth-child(3){
+	width: 100rpx;
+}
+page {
+	background-color: #fff;
+}
+.title {
+	border-left: 6rpx solid #E92933;
+	padding-left: 16rpx;
+	font-weight: bold;
+}
+.m-r-97:nth-child(4n) {
+	margin-right: 0 !important;
+}
+

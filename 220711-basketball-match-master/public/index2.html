@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<title>AJAX 发送请求示例 - 基础教程(nhooo.com)</title>
+
+<body>
+
+<h2>AJAX GET 请求</h2>
+<button type="button" onclick="fetchDoc()">获取内容</button>
+
+<div id="output"></div>
+
+<script>
+    function fetchDoc() {
+        var httpRequest = new XMLHttpRequest();
+        httpRequest.onreadystatechange = function() {
+            if (this.readyState === 4 && this.status === 200) {
+                document.getElementById("output").innerHTML = this.responseText;
+            }
+        };
+        httpRequest.open("GET", "http://47.104.8.244:39000/api/company/index", true);
+        httpRequest.send();
+    }
+</script>
+
+</body>
+</html>

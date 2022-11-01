@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "赛事竞猜",
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "pk-bar": "/components/pk-bar/pk-bar",
+    "uni-segmented-control": "/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control",
+    "uni-popup": "/uni_modules/uni-popup/components/uni-popup/uni-popup"
+  }
+}

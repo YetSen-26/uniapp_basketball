@@ -1,0 +1,39 @@
+
+.form-btn {
+	/* width: 690rpx; */
+	height: 94rpx;
+	line-height: 94rpx;
+	background: #f00206;
+	border-radius: 10rpx;
+	/* margin-left: 30rpx; */
+	color: #fff;
+	font-size: 32rpx;
+	margin-top: 66rpx;
+}
+.my-radio {
+	font-size: 30rpx;
+	margin-right: 20rpx;
+}
+radio {
+	-webkit-transform: scale(0.7);
+	        transform: scale(0.7);
+}
+.form-line-left {
+	font-size: 32rpx;
+}
+.form-line-right {
+	font-size: 30rpx;
+	text-align: right;
+}
+.form-line {
+	margin-top: 20rpx;
+	/* background-color: #FFFFFF; */
+}
+.form-line-border {
+	width: 100%;
+	height: 121rpx;
+	border-bottom: 1px solid #F5F5F5;
+	padding: 0 33rpx;
+	box-sizing: border-box;
+}
+

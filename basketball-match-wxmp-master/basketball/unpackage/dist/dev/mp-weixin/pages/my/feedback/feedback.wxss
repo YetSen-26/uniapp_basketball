@@ -1,0 +1,11 @@
+
+textarea{
+	background-color: #fff;
+	width: 690rpx;
+	margin: 30rpx;
+	/* color: #; */
+	padding: 30rpx;
+	box-sizing: border-box;
+}
+
+

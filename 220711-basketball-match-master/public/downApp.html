@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+    <!-- <meta http-equiv="X-UA-Compatible" content="IE=edge"> -->
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+	<title></title>
+	<link rel="stylesheet" type="text/css" href="index.css">
+</head>
+<body>
+	<div class="box">
+		<div class="topWrap"></div>
+		<div class="logoWrap">
+			<img src="">
+		</div>
+		<p class="appName"></p>
+		<div class="appMes"></div>
+		<div class="downAqBtn">安全下载</div>
+
+		<div class="appImgWrap">
+		</div>
+		
+	</div>
+	<script type="text/javascript" src="jquery-1.12.3.min.js"></script>
+	<script>
+		var oHtml = document.getElementsByTagName('html')[0]
+      	var viewWidth = window.innerWidth
+      	var fontSize = 100 * (viewWidth / 720)
+      	oHtml.style.fontSize = fontSize + 'px'
+
+      	// 在微信内置浏览器里，禁止微信浏览器使用微信的字体 不然rem混乱
+		if (typeof WeixinJSBridge == "object" && typeof WeixinJSBridge.invoke == "function") {
+		  	handleFontSize();
+		} else {
+			if (document.addEventListener) {
+				document.addEventListener("WeixinJSBridgeReady", handleFontSize, false);
+			} else if (document.attachEvent) {
+				document.attachEvent("WeixinJSBridgeReady", handleFontSize);
+				document.attachEvent("onWeixinJSBridgeReady", handleFontSize);
+			}
+		}
+
+
+		function handleFontSize() {
+		  	// 设置网页字体为默认大小
+		 	WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+		  	// 重写设置网页字体大小的事件
+		  	WeixinJSBridge.on('menu:setfont', function() {
+		      	WeixinJSBridge.invoke('setFontSizeCallback', { 'fontSize' : 0 });
+		  	});
+		}
+
+		var pageMes=getUrlParems(window.location.href); 
+		var u = navigator.userAgent;
+		var isWx = u.toLowerCase().indexOf('micromessenger') > -1 || typeof navigator.wxuserAgent !== 'undefined'
+      	var isAndroidWx = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1 //安卓
+      	var isiOSWx = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
+
+      	if(isAndroidWx){
+      		$(".downAqBtn").html('安全下载')
+      	}else if(isiOSWx){
+      		$(".downAqBtn").html('去App Store下载')
+      	}
+
+      	$.ajax({
+			type: 'post',
+			url : 'http://tuiguang.fvfire.com/api/common/downloadInfo',
+			headers: {
+				'Content-type': 'application/x-www-form-urlencoded'
+			},
+			success : function(res){
+				let objJson = res.data
+				console.log(res)
+				$('.logoWrap img').attr('src',objJson.data_logo_url)
+				$('.appName').html(objJson.data_app_name)
+				// $('.appName').html('百事桶')
+				$('.appMes').html(objJson.data_app_Introduction)
+
+				$(document).attr("title",objJson.data_app_name);
+
+				for(var i=0;i<objJson.data_app_image_list.length;i++){
+					$('.appImgWrap').append('<div><img src="'+objJson.data_app_image_list[i]+'"/></div>')
+				}
+				$('.downAqBtn').click(function() {
+					window.location.href = objJson.data_download_Url
+				})
+			}
+		})
+
+		function getUrlParems(url) {
+		    var index = url.indexOf("?");
+		    var str = url.substr(index + 1);
+		    var aParams = str.split("&");
+		    var obj = {};
+		    for (var i = 0; i < aParams.length; i++) {
+		        var inParams = aParams[i].split("=");
+		        obj[inParams[0]] = inParams[1];
+		    }
+		    return obj;
+		}
+
+
+
+	</script>
+</body>
+</html>

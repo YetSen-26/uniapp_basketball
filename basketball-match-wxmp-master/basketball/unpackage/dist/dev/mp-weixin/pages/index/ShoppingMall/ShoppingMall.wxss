@@ -1,0 +1,12 @@
+
+.mx-line {
+	width: 330rpx;
+	padding: 15rpx;
+	box-sizing: border-box;
+	background: #213075;
+}
+.mx-label {
+	background-color: #F93944;
+	padding: 3rpx 14rpx;
+}
+

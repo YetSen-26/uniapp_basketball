@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "赛程规则",
+  "navigationBarBackgroundColor": "#0D1129",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "u-parse": "/components/u-parse/u-parse"
+  }
+}

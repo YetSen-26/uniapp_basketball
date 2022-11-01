@@ -1,0 +1,8 @@
+
+.mx-line{
+	width: 690rpx;
+	margin-left: 30rpx;
+	border-bottom: 1px solid #fff;
+	padding: 12rpx 0;
+}
+

@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "球员生涯",
+  "navigationBarBackgroundColor": "#0D1129",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "uni-segmented-control": "/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control"
+  }
+}

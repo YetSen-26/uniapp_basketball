@@ -1,0 +1,197 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/index/index",
+			"style": {
+				"navigationBarTitleText": "首页",
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path": "pages/index/mall",
+			"style": {
+				"navigationBarTitleText": "商城",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/schedule/schedule",
+			"style": {
+				"navigationBarTitleText": "赛程",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/leaderboard/leaderboard",
+			"style": {
+				"navigationBarTitleText": "排行榜",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+		},
+		{
+			"path": "pages/my/my",
+			"style": {
+				"navigationBarTitleText": "",
+				"navigationStyle": "custom",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+		}, {
+			"path": "pages/index/ShoppingMall/ShoppingMall",
+			"style": {
+				"navigationBarTitleText": "商城",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/signup/signup",
+			"style": {
+				"navigationBarTitleText": "赛事列表",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+
+		}, {
+			"path": "pages/index/signup/add/add",
+			"style": {
+				"navigationBarTitleText": "赛事报名",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/index/signedplayer/signedplayer",
+			"style": {
+				"navigationBarTitleText": "校园球星",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/index/rule/rule",
+			"style": {
+				"navigationBarTitleText": "赛程规则",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+		}, {
+			"path": "pages/my/career",
+			"style": {
+				"navigationBarTitleText": "球员生涯",
+				"navigationBarBackgroundColor": "#0D1129",
+				"navigationBarTextStyle": "white"
+			}
+		}, {
+			"path": "pages/schedule/details/details",
+			"style": {
+				"navigationBarTitleText": "赛事竞猜",
+				"enablePullDownRefresh": false
+			}
+
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/my/feedback/feedback",
+			"style": {
+				"navigationBarTitleText": "意见反馈",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/index/ShoppingMall/details/details",
+			"style": {
+				"navigationBarTitleText": "商品详情",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/my/goldcoins/goldcoins",
+			"style": {
+				"navigationBarTitleText": "金币日志",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/my/order/order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/my/order/details/details",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/my/protocol",
+			"style": {
+				"navigationBarTitleText": "",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "pages/my/editdata/editdata",
+			"style": {
+				"navigationBarTitleText": "编辑信息",
+				"enablePullDownRefresh": false
+			}
+		}
+	],
+	"globalStyle": {
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"uniIdRouter": {},
+	"tabBar": {
+		"borderStyle": "black",
+		"backgroundColor": "#232323",
+		"color": "#9B9B9B",
+		"selectedColor": "#FFFFFF",
+		"list": [{
+				"pagePath": "pages/index/index",
+				"iconPath": "static/tabbar/sy.png",
+				"selectedIconPath": "static/tabbar/sy_st.png",
+				"text": "主页"
+			},
+			{
+				"pagePath": "pages/schedule/schedule",
+				"iconPath": "static/tabbar/sc.png",
+				"selectedIconPath": "static/tabbar/sc_st.png",
+				"text": "赛程"
+			},
+			{
+				"pagePath": "pages/leaderboard/leaderboard",
+				"iconPath": "static/tabbar/phb.png",
+				"selectedIconPath": "static/tabbar/phb_st.png",
+				"text": "排行榜"
+			},
+			{
+				"pagePath": "pages/my/my",
+				"iconPath": "static/tabbar/wd.png",
+				"selectedIconPath": "static/tabbar/wd_st.png",
+				"text": "我的"
+			}
+		]
+	},
+	"condition" : { //模式配置，仅开发期间生效
+		"current": 0, //当前激活的模式(list 的索引项)
+		"list": [
+			{
+				"name": "", //模式名称
+				"path": "", //启动页面，必选
+				"query": "" //启动参数，在页面的onLoad函数里面得到
+			}
+		]
+	}
+}

@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "商城",
+  "navigationBarBackgroundColor": "#0D1129",
+  "navigationBarTextStyle": "white",
+  "usingComponents": {
+    "uni-search-bar": "/uni_modules/uni-search-bar/components/uni-search-bar/uni-search-bar",
+    "uni-segmented-control": "/uni_modules/uni-segmented-control/components/uni-segmented-control/uni-segmented-control"
+  }
+}
